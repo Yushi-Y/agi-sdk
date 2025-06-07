@@ -1,13 +1,24 @@
 from agisdk import REAL
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 def run_agent(api_key=None, run_name=None):
+    # Get API key from environment variable
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    if not openai_api_key:
+        raise ValueError("OPENAI_API_KEY not found in environment variables. Please check your .env file.")
+        
     harness = REAL.harness(
         model="gpt-4o-mini",
         headless=False,
         max_steps=15,
         use_screenshot=True,
         use_axtree=True,
-        local_task="udriver-10.json"
+        task_name="webclones.gomail-1",
+        openai_api_key=openai_api_key  # Pass the API key to harness
     )
     return harness.run()
 
